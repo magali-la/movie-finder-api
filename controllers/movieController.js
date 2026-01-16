@@ -32,5 +32,33 @@ const searchMovies = async (req, res) => {
     }
 };
 
+// callback to get specific movie and details by its id number
+const getMovieDetails = async (req, res) => {
+    // take the value from the request url after id - this isn't a query so we need the slug :id defined by the route so use params
+    const id = req.params.id
+
+    // validate if it's included otherwise error
+    if (!id) {
+        return res.status(400).json({ error: "Id query parameter is required to run this request" })
+    }
+
+    // try catch to fetch from the OMDb api with their required parameters
+    try {
+        const response = await axios.get("http://www.omdbapi.com/", {
+            params: {
+                i: id,
+                apikey: process.env.OMDB_API_KEY
+            }
+        });
+
+        // send successful response data to client
+        res.json(response.data);
+    } catch (error) {
+        // 
+        console.error("OMDb API error:", error.message);
+        res.status(500).json({ error: "Error fetching movie id details from OMDb"});
+    }
+}
+
 // export the functions for use in movieRoutes
-module.exports = { searchMovies };
+module.exports = { searchMovies, getMovieDetails };
