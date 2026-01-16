@@ -3,10 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 // import controller functions
-const controller = require("../controllers/movieController.js");
+const movieController = require("../controllers/movieController.js");
 
 // set up routes with controller functions
-router.get("/search")
-router.get("/movies/:id")
+router.get("/search", movieController.searchMovies)
+// router.get("/movies/:id")
 
 module.exports = router;
